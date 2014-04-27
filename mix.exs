@@ -22,6 +22,6 @@ defmodule DiceInterface.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    []
+    [{:jazz, github: "meh/jazz"}]
   end
 end
