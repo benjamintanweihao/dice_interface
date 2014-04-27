@@ -55,6 +55,7 @@ defmodule DiceInterface.Server do
   ######################
 
   defp handle_data(socket, raw_data, state) do  
+    IO.inspect("DATA: #{raw_data}")
     :gen_tcp.send(socket, raw_data)
     :gen_tcp.close(socket)
     state
