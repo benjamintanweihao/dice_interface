@@ -2,14 +2,11 @@
 
 This is a TCP server that communicates between a client application over JSON and [DiCE, the Distributed Cache in Elixir](https://github.com/benjamintanweihao/dice).
 
-
 The TCP server is inspired by Chapter 11 (Implementing a TCP server) of Erlang/OTP in Action.
 
-## Example Run
+For more details, see DiCE's [README](https://github.com/benjamintanweihao/dice/blob/master/README.md).
 
-```
-> iex -S mix
-```
+## Sample Client
 
 Here is a simple Ruby Client to talk to DiCE:
 
