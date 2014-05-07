@@ -10,22 +10,54 @@ The TCP server is inspired by Chapter 11 (Implementing a TCP server) of Erlang/O
 > iex -S mix
 ```
 
-In this example, we use a simple Ruby program to send a message over a TCP socket.
+Here is a simple Ruby Client to talk to DiCE:
 
 ```ruby
+#!/usr/bin/env ruby
+ 
+require 'json'
 require 'socket'
-
-sock = TCPSocket.new('localhost', 1155)
-sock.write "Elixir Sockets FTW"
-
-while line = sock.gets # Read lines from socket
-  puts line            # and print them
+ 
+class DiceClient
+  def initialize(host, port)
+    @host = host
+    @port = port
+    puts "Connecting to server..."
+  end
+ 
+  def put(key, value)
+    op({"op" => "put", "key" => key, "value" => value})
+  end
+ 
+  def get(key)
+    op({"op" => "get", "key" => key})
+  end
+ 
+  def remove(key)
+    op({"op" => "remove", "key" => key})
+  end
+ 
+  def op(data)
+    @socket = TCPSocket.new(@host, @port)
+    @socket.write(JSON.generate(data))
+    @socket.read.to_json
+  end
+ 
 end
-sock.close
-```
-
-Observe in the `iex` console:
-
-```elixir
-iex> "Elixir Sockets FTW"
+ 
+client = DiceClient.new('localhost', 1155)
+ 
+puts "=== PUT ==="
+puts client.put("elixir", "awesome sauce")
+puts client.put("ruby", "is pretty great too")
+puts "=== GET ==="
+puts client.get("elixir")
+puts client.get("ruby")
+puts "=== REMOVE ==="
+puts client.remove("elixir")
+puts "=== PUT ==="
+puts client.put("elixir", "really awesome sauce")
+puts "=== GET ==="
+puts client.get("elixir")
+puts client.get("ruby")
 ```

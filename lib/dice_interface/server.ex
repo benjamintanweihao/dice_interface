@@ -55,19 +55,16 @@ defmodule DiceInterface.Server do
   ######################
 
   defp handle_data(socket, raw_data, state) do  
-    IO.inspect("DATA: #{raw_data}")
-
     json = case "#{raw_data}" |> JSON.decode do
              {:ok, hash} ->
 
-               # TODO: HOW TO ACCESS Dice.Server from Node?
                result = case hash["op"] do
                           "put" ->
-                            apply(Dice.Server, :put, [hash["key"], hash["value"]])
+                            :gen_server.call({:global, Dice.Server}, {:put, hash["key"], hash["value"]})
                           "get" ->
-                            apply(Dice.Server, :get, [hash["key"]])
+                            :gen_server.call({:global, Dice.Server}, {:get, hash["key"]})
                           "remove" ->
-                            apply(Dice.Server, :remove, [hash["key"]])
+                            :gen_server.call({:global, Dice.Server}, {:remove, hash["key"]})
                           _ ->
                             :error
                         end
